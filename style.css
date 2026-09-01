@@ -3,3 +3,7 @@ body {
   background-color: #e4c78d;
   padding: 40px;
 }
+img {
+  max-width: 100%;
+  height: auto;
+}
