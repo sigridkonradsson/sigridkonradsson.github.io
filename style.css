@@ -1,9 +1,15 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #e4c78d;
+  background-color: #837575;
   padding: 40px;
+  text-align: center;
 }
-img {
-  max-width: 100%;
-  height: auto;
+.kattbild{
+  width: 300px;
+  border-radius: 20px;
+}
+
+.hundbild{
+  width: 100px;
+  border-radius: 20px;
 }
