@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracking / Google Tag Manager — Sigrid Konradsson</title>
+<meta name="description" content="Projekt inom tracking: GTM-containers, GA4-events och dataLayer-implementation.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+</script>
+
+<nav class="nav" id="siteNav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__mark" data-track="nav-logo">Sigrid Konradsson</a>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="index.html#work" data-track="nav-work">Work</a></li>
+      <li><a href="index.html#about" data-track="nav-about">About</a></li>
+      <li><a href="index.html#skills" data-track="nav-skills">Skills</a></li>
+      <li><a href="index.html#contact" data-track="nav-contact">Contact</a></li>
+    </ul>
+    <a href="index.html#contact" class="nav__cta" data-track="nav-cta-contact">Say hello →</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Öppna meny" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<header class="project-hero" id="top">
+  <div class="project-hero__media">
+    <img src="https://picsum.photos/id/1015/1800/1100" alt="Hero-bild för GTM-projektet">
+    <div class="project-hero__scrim"></div>
+  </div>
+  <div class="wrap project-hero__content">
+    <p class="eyebrow">02 — Tracking / GTM</p>
+    <h1>Mätning som faktiskt går att lita på</h1>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <dl class="project-meta reveal">
+    <div><dt>Roll</dt><dd>Tracking-ansvarig</dd></div>
+    <div><dt>Kontext</dt><dd>Eget fördjupningsprojekt</dd></div>
+    <div><dt>Fokus</dt><dd>GTM &amp; GA4</dd></div>
+    <div><dt>Verktyg</dt><dd>GTM, GA4, dataLayer</dd></div>
+  </dl>
+
+  <section class="project-block reveal">
+    <div><p class="project-block__label"><span class="project-block__num">00</span>Sammanfattning</p></div>
+    <div class="project-block__body">
+      <p class="body-lg">
+        Uppbyggnad av ett komplett trackingupplägg i Google Tag Manager, från container och triggers till events som faktiskt går att analysera i GA4 — utan att gissa vad siffrorna betyder.
+      </p>
+    </div>
+  </section>
+
+  <section class="project-block reveal">
+    <div><p class="project-block__label"><span class="project-block__num">01</span>Challenge</p></div>
+    <div class="project-block__body">
+      <h2>Klick som inte betydde något mätbart</h2>
+      <p>
+        Utgångsläget var en sajt utan strukturerad mätning: inga custom events, ingen tydlig koppling mellan klick och affärsvärde, och ingen dataLayer att bygga vidare på. Varje ny mätpunkt hade behövt byggas från grunden, en i taget.
+      </p>
+    </div>
+  </section>
+
+  <section class="project-block reveal">
+    <div><p class="project-block__label"><span class="project-block__num">02</span>Approach</p></div>
+    <div class="project-block__body">
+      <h2>Bygg strukturen en gång, återanvänd den överallt</h2>
+      <p>
+        Istället för punktinsatser byggdes ett generellt dataLayer-mönster där varje klickbart element taggas med ett attribut i koden. Ett enda GTM-lyssnarupplägg kunde sedan fånga alla klick, oavsett var på sajten de skedde.
+      </p>
+    </div>
+  </section>
+
+  <section class="project-block reveal">
+    <div><p class="project-block__label"><span class="project-block__num">03</span>Process</p></div>
+    <div class="project-block__body">
+      <h2>Container, triggers, variabler — i den ordningen</h2>
+      <p>
+        Arbetet gick igenom GTM-containerns uppbyggnad, definition av triggers för klick, formulärinskick, scroll depth och synlighet av element, samt variabler som plockar upp data direkt från dataLayer. Events kopplades därefter till GA4 tillsammans med ecommerce-parametrar och URL-parametrar för kampanjspårning.
+      </p>
+    </div>
+  </section>
+
+  <div class="project-gallery reveal">
+    <img src="https://picsum.photos/id/1016/900/700" alt="Skärmdump av GTM-container">
+    <img src="https://picsum.photos/id/1018/900/700" alt="Skärmdump av GA4-events">
+  </div>
+
+  <section class="project-block reveal">
+    <div><p class="project-block__label"><span class="project-block__num">04</span>Outcome</p></div>
+    <div class="project-block__body">
+      <h2>Ett upplägg som är enkelt att bygga vidare på</h2>
+      <p>
+        Resultatet blev ett konsekvent trackingsystem där nya mätpunkter kan läggas till genom att bara märka upp ett nytt element i koden — utan att röra GTM-uppsättningen i grunden. Denna portfolio använder samma princip, se <code>data-track</code>-attributen i koden.
+      </p>
+    </div>
+  </section>
+
+  <section class="project-block reveal">
+    <div><p class="project-block__label"><span class="project-block__num">05</span>Lärdomar</p></div>
+    <div class="project-block__body">
+      <h2>Bra tracking är ett designbeslut, inte en eftertanke</h2>
+      <p>
+        Den viktigaste lärdomen var att trackingstrukturen bör planeras i samma stund som sajten byggs — inte läggas till i efterhand. Ett konsekvent namngivet dataLayer sparar enormt mycket tid i GTM och gör analysen i GA4 mycket mer pålitlig.
+      </p>
+    </div>
+  </section>
+
+  <nav class="project-nav reveal" aria-label="Nästa projekt">
+    <a href="project-growth.html" class="link-cta" data-track="project-nav-back" data-track-text="Föregående: Growth Marketing">← Föregående</a>
+    <a href="project-ai.html" class="link-cta" data-track="project-nav-next" data-track-text="Nästa: AI & Communication">Nästa: AI &amp; Communication →</a>
+  </nav>
+</div>
+
+<footer class="section section--dark">
+  <div class="wrap footer">
+    <span>© <span id="year"></span> Sigrid Konradsson</span>
+    <span>Stockholm, Sverige</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
