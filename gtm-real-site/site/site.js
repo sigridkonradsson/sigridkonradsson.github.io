@@ -178,9 +178,14 @@ window.dataLayer = window.dataLayer || [];
         var news = document.getElementById('footer-newsletter');
         if (news) {
             news.addEventListener('submit', function (e) {
-                e.preventDefault();
-                news.innerHTML = '<p class="notice">Thanks — you are on the list.</p>';
-            });
+    e.preventDefault();
+    window.dataLayer.push({
+        event: 'newsletter_signup',
+        form: { id: 'footer-newsletter', location: 'footer' },
+        user: { consent: { marketing: true } }
+    });
+    news.innerHTML = '<p class="notice">Thanks — you are on the list.</p>';
+});
         }
 
         // Call-to-action links. Push first, then follow the link.
