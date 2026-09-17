@@ -33,7 +33,11 @@
       const response = await fetch(url);
       const data = await response.json();
 
-      console.log(data);
+     results.innerHTML = "";
+
+data.items.forEach(video => {
+  results.innerHTML += `<p>${video.snippet.title}</p>`;
+});
     });
   </script>
 
