@@ -5,25 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Content Idea Validator</title>
 </head>
-<script>
-  const API_KEY = "AIzaSyCfoCyHM8mYUEjrcAJukwpb2VO47cUJcns";
 
-  const searchButton = document.getElementById("searchButton");
-  const searchInput = document.getElementById("searchInput");
-  const results = document.getElementById("results");
-
-  searchButton.addEventListener("click", async function () {
-    const searchTerm = searchInput.value;
-
-    const url =
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&regionCode=SE&relevanceLanguage=sv&q=${encodeURIComponent(searchTerm)}&key=${API_KEY}`;
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    console.log(data);
-  });
-</script>
 <body>
 
   <h1>Content Idea Validator</h1>
@@ -35,6 +17,26 @@
   <button id="searchButton">Analysera</button>
 
   <div id="results"></div>
+
+  <script>
+    const API_KEY = "DIN_API_NYCKEL";
+
+    const searchButton = document.getElementById("searchButton");
+    const searchInput = document.getElementById("searchInput");
+    const results = document.getElementById("results");
+
+    searchButton.addEventListener("click", async function () {
+      const searchTerm = searchInput.value;
+
+      const url =
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&regionCode=SE&relevanceLanguage=sv&q=${encodeURIComponent(searchTerm)}&key=${API_KEY}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      console.log(data);
+    });
+  </script>
 
 </body>
 </html>
