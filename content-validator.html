@@ -36,7 +36,20 @@
      results.innerHTML = "";
 
 data.items.forEach(video => {
-  results.innerHTML += `<p>${video.snippet.title}</p>`;
+  const videoId = video.id.videoId;
+  const title = video.snippet.title;
+  const image = video.snippet.thumbnails.medium.url;
+
+  results.innerHTML += `
+    <div>
+      <img src="${image}" width="250">
+      <p>
+        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
+          ${title}
+        </a>
+      </p>
+    </div>
+  `;
 });
     });
   </script>
