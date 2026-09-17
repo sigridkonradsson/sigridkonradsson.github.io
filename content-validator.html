@@ -13,12 +13,14 @@
   <p>Skriv ett ämne du vill skapa content om:</p>
 
   <input id="searchInput" type="text" placeholder="Exempel: AI marketing">
-
   <button id="searchButton">Analysera</button>
+
+  <h2>YouTube</h2>
   <div id="results"></div>
 
-<h2>Nyheter</h2>
-<div id="newsResults"></div>
+  <h2>Nyheter</h2>
+  <div id="newsResults"></div>
+
   <script>
     const API_KEY = "AIzaSyCfoCyHM8mYUEjrcAJukwpb2VO47cUJcns";
     const NEWS_API_KEY = "pub_b1f5033c1d84419cae16f7acea3888fe";
@@ -26,70 +28,62 @@
     const searchButton = document.getElementById("searchButton");
     const searchInput = document.getElementById("searchInput");
     const results = document.getElementById("results");
+    const newsResults = document.getElementById("newsResults");
 
     searchButton.addEventListener("click", async function () {
+
       const searchTerm = searchInput.value;
 
-      const url =
+      // YOUTUBE
+      const youtubeUrl =
         `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&regionCode=SE&relevanceLanguage=sv&q=${encodeURIComponent(searchTerm)}&key=${API_KEY}`;
 
-      const response = await fetch(url);
-      const data = await response.json();
+      const youtubeResponse = await fetch(youtubeUrl);
+      const youtubeData = await youtubeResponse.json();
 
+      results.innerHTML = "";
+
+      youtubeData.items.forEach(video => {
+
+        const videoId = video.id.videoId;
+        const title = video.snippet.title;
+        const image = video.snippet.thumbnails.medium.url;
+
+        results.innerHTML += `
+          <div>
+            <img src="${image}" width="250">
+
+            <p>
+              <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
+                ${title}
+              </a>
+            </p>
+          </div>
+        `;
+      });
+
+
+      // SVENSKA NYHETER
       const newsUrl =
-  `https://newsdata.io/api/1/latest?apikey=${NEWS_API_KEY}&q=${encodeURIComponent(searchTerm)}&country=se&language=sv`;
+        `https://newsdata.io/api/1/latest?apikey=${NEWS_API_KEY}&q=${encodeURIComponent(searchTerm)}&country=se&language=sv`;
 
-const newsResponse = await fetch(newsUrl);
-const newsData = await newsResponse.json();
+      const newsResponse = await fetch(newsUrl);
+      const newsData = await newsResponse.json();
 
-const newsResults = document.getElementById("newsResults");
-newsResults.innerHTML = "";
+      newsResults.innerHTML = "";
 
-newsData.results.slice(0, 5).forEach(article => {
-  newsResults.innerHTML += `
-    <p>
-      <a href="${article.link}" target="_blank">
-        ${article.title}
-      </a>
-    </p>
-  `;
-});
-     results.innerHTML = "";
+      newsData.results.slice(0, 5).forEach(article => {
 
-data.items.forEach(video => {
-  const videoId = video.id.videoId;
-  const title = video.snippet.title;
-  const image = video.snippet.thumbnails.medium.url;
+        newsResults.innerHTML += `
+          <p>
+            <a href="${article.link}" target="_blank">
+              ${article.title}
+            </a>
+          </p>
+        `;
+      });
 
-  results.innerHTML += `
-    <div>
-      <img src="${image}" width="250">
-      <p>
-        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
-          ${title}
-        </a>
-      </p>
-    </div>
-  `;
-});
     });
-    const newsUrl =
-  `https://newsdata.io/api/1/latest?apikey=${NEWS_API_KEY}&q=${encodeURIComponent(searchTerm)}&country=se&language=sv`;
-
-const newsResponse = await fetch(newsUrl);
-const newsData = await newsResponse.json();
-
-const newsResults = document.getElementById("newsResults");
-newsResults.innerHTML = "";
-newsData.results.slice(0, 5).forEach(article => {
-  newsResults.innerHTML += `
-    <p>
-      <a href="${article.link}" target="_blank">
-        ${article.title}
-      </a>
-    </p>
-  `;
-});
   </script>
 
 </body>
