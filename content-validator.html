@@ -15,26 +15,38 @@
   <input id="searchInput" type="text" placeholder="Exempel: AI marketing">
   <button id="searchButton">Analysera</button>
 
+  <h2>Bedömning</h2>
+  <div id="scoreResult"></div>
+
   <h2>YouTube</h2>
   <div id="results"></div>
 
   <h2>Nyheter</h2>
   <div id="newsResults"></div>
 
+
   <script>
+
+    // Lägg in dina två nycklar här
     const API_KEY = "AIzaSyCfoCyHM8mYUEjrcAJukwpb2VO47cUJcns";
     const NEWS_API_KEY = "pub_b1f5033c1d84419cae16f7acea3888fe";
 
+
     const searchButton = document.getElementById("searchButton");
     const searchInput = document.getElementById("searchInput");
+
     const results = document.getElementById("results");
     const newsResults = document.getElementById("newsResults");
+    const scoreResult = document.getElementById("scoreResult");
+
 
     searchButton.addEventListener("click", async function () {
 
       const searchTerm = searchInput.value;
 
-      // YOUTUBE
+
+      // YOUTUBE API
+
       const youtubeUrl =
         `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&regionCode=SE&relevanceLanguage=sv&q=${encodeURIComponent(searchTerm)}&key=${API_KEY}`;
 
@@ -63,7 +75,8 @@
       });
 
 
-      // SVENSKA NYHETER
+      // NEWSDATA API
+
       const newsUrl =
         `https://newsdata.io/api/1/latest?apikey=${NEWS_API_KEY}&q=${encodeURIComponent(searchTerm)}&country=se&language=sv`;
 
@@ -83,7 +96,36 @@
         `;
       });
 
+
+      // BEDÖMNING
+
+      const youtubeTotal = youtubeData.pageInfo.totalResults;
+      const newsTotal = newsData.totalResults;
+
+      let relevance = "";
+
+      if (youtubeTotal > 1000 && newsTotal > 20) {
+        relevance = "Hög relevans";
+      }
+
+      else if (youtubeTotal > 100 || newsTotal > 5) {
+        relevance = "Medel relevans";
+      }
+
+      else {
+        relevance = "Låg relevans";
+      }
+
+
+      scoreResult.innerHTML = `
+        <h3>${relevance}</h3>
+
+        <p>YouTube-träffar: ${youtubeTotal}</p>
+        <p>Nyhetsartiklar: ${newsTotal}</p>
+      `;
+
     });
+
   </script>
 
 </body>
