@@ -157,4 +157,9 @@
   if (yearEl) {
     yearEl.textContent = new Date().getFullYear();
   }
-})();
+})();window.dataLayer = window.dataLayer || [];
+
+window.dataLayer.push({
+  event: "portfolio_loaded",
+  page_name: document.title
+});
