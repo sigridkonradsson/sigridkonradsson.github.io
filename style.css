@@ -828,3 +828,169 @@ p{ margin: 0; }
   .work-intro h2{ max-width: none; }
   .spread__text h3{ max-width: none; }
 }
+/* ==========================================================================
+   15. CONTENT VALIDATOR (content-validator.html)
+   Endast visuell styling — rör inte funktionaliteten. Element-ID:na
+   (#searchInput, #searchButton, #results, #newsResults, #scoreResult)
+   är samma som i den fungerande JavaScript-koden.
+   ========================================================================== */
+
+.sr-only{
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+.validator-step{
+  color: var(--accent);
+  font-weight: 700;
+  font-size: var(--step-sm);
+  margin-bottom: var(--sp-3);
+}
+
+/* --- Sökfält --- */
+.validator-search{
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-4);
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.validator-search input{
+  flex: 1;
+  min-width: 220px;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--ink);
+  padding: var(--sp-1) 0;
+}
+
+.validator-search input::placeholder{
+  color: var(--ink-soft);
+  opacity: 0.55;
+}
+
+.validator-search button{
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
+  font-size: var(--step-sm);
+  letter-spacing: 0.02em;
+  padding: 0.95rem 2rem;
+  white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease);
+}
+
+.validator-search button:hover,
+.validator-search button:focus-visible{
+  background: var(--accent);
+}
+
+/* --- Bedömning (#scoreResult fylls av JS med h3 + p + p) --- */
+.validator-score{
+  min-height: 2rem;
+}
+
+.validator-score h3{
+  font-family: var(--font-display);
+  font-size: var(--step-xxl);
+  color: var(--accent);
+  margin-bottom: var(--sp-3);
+}
+
+.validator-score p{
+  display: inline-block;
+  font-size: var(--step-md);
+  color: var(--ink-soft);
+  margin: 0 var(--sp-4) 0 0;
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--line);
+}
+
+/* --- YouTube-resultat (#results fylls av JS med <div><img><p><a></p></div>) --- */
+.validator-youtube{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--sp-3);
+}
+
+.validator-youtube > div{
+  border: 1px solid var(--line);
+  overflow: hidden;
+  transition: transform var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+
+.validator-youtube > div:hover{
+  transform: translateY(-4px);
+  border-color: var(--ink);
+}
+
+.validator-youtube img{
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(25%);
+  transition: filter var(--dur-fast) var(--ease);
+}
+
+.validator-youtube > div:hover img{
+  filter: grayscale(0%);
+}
+
+.validator-youtube p{
+  margin: 0;
+  padding: var(--sp-2);
+  font-size: var(--step-sm);
+  line-height: 1.4;
+}
+
+.validator-youtube a{
+  font-weight: 600;
+}
+
+.validator-youtube a:hover{
+  color: var(--accent);
+}
+
+/* --- Nyhetsresultat (#newsResults fylls av JS med <p><a></p>) --- */
+.validator-news{
+  border-top: 1px solid var(--line);
+}
+
+.validator-news p{
+  margin: 0;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.validator-news a{
+  font-family: var(--font-display);
+  font-size: var(--step-md);
+}
+
+.validator-news a:hover{
+  color: var(--accent);
+}
+
+/* --- Mobil --- */
+@media (max-width: 600px){
+  .validator-search{
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .validator-search button{
+    width: 100%;
+  }
+  .validator-score p{
+    display: block;
+    margin-right: 0;
+  }
+}
