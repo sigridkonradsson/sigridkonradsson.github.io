@@ -1,0 +1,129 @@
+import * as cheerio from 'cheerio';
+import fs from 'fs';
+
+// Lista över sidor att skrapa (flyttfirmor)
+const pages = [
+  'https://www.allabolag.se/bransch-s%C3%B6k?q=flyttfirmor',
+  'https://www.allabolag.se/bransch-s%C3%B6k?q=flyttfirmor&page=2',
+  'https://www.allabolag.se/bransch-s%C3%B6k?q=flyttfirmor&page=3',
+  'https://www.allabolag.se/bransch-s%C3%B6k?q=flyttfirmor&page=4',
+  'https://www.allabolag.se/bransch-s%C3%B6k?q=flyttfirmor&page=5',
+];
+
+// Vänta X millisekunder
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Enkel hjälpfunktion för att hämta en sida
+// (lätt att bygga ut med proxy senare)
+async function fetchPage(url) {
+  const headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+    'Accept-Language': 'sv-SE,sv;q=0.9,en;q=0.8',
+    // Tvinga färsk kopia – ingen cache
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+  };
+
+  // Här kan du senare lägga till proxy, t.ex.:
+  // const proxy = 'http://user:pass@proxy:port';
+  // och använda en ProxyAgent från undici/https-proxy-agent
+
+  const response = await fetch(url, {
+    headers,
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP-fel: ${response.status} ${response.statusText}`);
+  }
+
+  return response.text();
+}
+
+async function scrape() {
+  const allCompanies = [];
+
+  for (let i = 0; i < pages.length; i++) {
+    const url = pages[i];
+    const pageNumber = i + 1;
+
+    console.log(`Hämtar sida ${pageNumber} av ${pages.length}...`);
+
+    try {
+      const html = await fetchPage(url);
+      const $ = cheerio.load(html);
+
+      const companiesOnPage = [];
+
+      $('.SearchResultCard-card').each((j, card) => {
+        const $card = $(card);
+
+        // 1. Företagsnamn
+        const name = $card.find('h2 a').first().text().trim() || '';
+
+        // 2. Organisationsnummer
+        let orgnr = '';
+        $card.find('.CardHeader-propertyList').each((k, el) => {
+          const text = $(el).text().trim();
+          if (text.startsWith('Org.nr')) {
+            orgnr = text.replace('Org.nr', '').trim();
+          }
+        });
+
+        // 3. Telefonnummer
+        let phone = '';
+        const phoneEl = $card.find('.CardHeader-phone');
+        if (phoneEl.length) {
+          phone = phoneEl.text().replace('Telefon', '').trim();
+        }
+
+        // 4. Adress
+        let address = '';
+        $card.find('.CardHeader-propertyList').each((k, el) => {
+          const $el = $(el);
+          const text = $el.text().trim();
+          if (text.startsWith('Org.nr') || $el.hasClass('CardHeader-phone')) {
+            return;
+          }
+          address = text;
+        });
+
+        companiesOnPage.push({ name, orgnr, phone, address });
+      });
+
+      console.log(`  → Hittade ${companiesOnPage.length} företag på sida ${pageNumber}`);
+      allCompanies.push(...companiesOnPage);
+    } catch (error) {
+      console.error(`  → Fel på sida ${pageNumber}: ${error.message}`);
+      // Fortsätt med nästa sida
+    }
+
+    // Vänta 500 ms innan nästa sida (utom efter sista)
+    if (i < pages.length - 1) {
+      await sleep(500);
+    }
+  }
+
+  // Skapa CSV
+  const header = 'företagsnamn,organisationsnummer,telefonnummer,adress';
+  const escape = (val) => {
+    if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+      return `"${val.replace(/"/g, '""')}"`;
+    }
+    return val;
+  };
+
+  const rows = allCompanies.map((c) =>
+    [escape(c.name), escape(c.orgnr), escape(c.phone), escape(c.address)].join(',')
+  );
+
+  const csvContent = [header, ...rows].join('\n');
+  fs.writeFileSync('foretag.csv', csvContent, 'utf8');
+
+  console.log(`\nKlart! Totalt ${allCompanies.length} företag sparade i foretag.csv`);
+}
+
+scrape();
